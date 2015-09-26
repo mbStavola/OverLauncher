@@ -4,24 +4,24 @@ ext {
   versionAppCode = 1
   versionAppName = "1.0"
 
-  versionBuildTools = "22.0.1"
-  versionSdkCompile = 22
-  versionSdkMin = 19
-  versionSdkTarget = 22
-
-  versionAppCompat = "23.0.1"
+  versionBuildTools = "23.0.1"
 
   versionDagger = "1.2.2"
+  versionButterKnife = "7.0.1"
+  versionPicasso = "2.5.2"
+  versionOkHttp = "2.5.0"
+
+  versionGlide = "3.6.1"
 }
 
 android {
-  compileSdkVersion versionSdkCompile
+  compileSdkVersion 23
   buildToolsVersion versionBuildTools
 
   defaultConfig {
     applicationId "com.kevinmost.overlauncher"
-    minSdkVersion versionSdkMin
-    targetSdkVersion versionSdkTarget
+    minSdkVersion 19
+    targetSdkVersion 23
     versionCode versionAppCode
     versionName versionAppName
   }
@@ -36,8 +36,20 @@ android {
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
 
-  compile "com.android.support:appcompat-v7:$versionAppCompat"
+  compile "com.android.support:appcompat-v7:$versionBuildTools"
+
+  compile "com.github.bumptech.glide:glide:$versionGlide"
+  compile "com.android.support:support-v4:$versionBuildTools"
+
 
   compile "com.squareup.dagger:dagger:$versionDagger"
   provided "com.squareup.dagger:dagger-compiler:$versionDagger"
+
+  compile "com.jakewharton:butterknife:$versionButterKnife"
+
+  compile "com.squareup.picasso:picasso:$versionPicasso"
+
+  compile "com.squareup.okhttp:okhttp:$versionOkHttp"
+
+
 }
