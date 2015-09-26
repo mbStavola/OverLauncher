@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.kevinmost.overlauncher.app.App;
 import com.kevinmost.overlauncher.model.InstalledApp;
@@ -42,7 +44,7 @@ public class PackageUtil {
         .setComponent(componentName);
   }
 
-  public List<InstalledApp> getInstalledPackages() {
+  public @NonNull List<InstalledApp> getInstalledPackages() {
     final Intent launcherIntent = new Intent(Intent.ACTION_MAIN, null);
     launcherIntent.addCategory(Intent.CATEGORY_LAUNCHER);
     final List<ResolveInfo> packages = packageManager.queryIntentActivities(launcherIntent, 0);
@@ -51,5 +53,24 @@ public class PackageUtil {
       installedApps.add(new InstalledApp(aPackage));
     }
     return installedApps;
+  }
+
+  public @NonNull List<InstalledApp> getInstalledPackages(@Nullable String filter) {
+    final List<InstalledApp> unfiltered = getInstalledPackages();
+    if (filter == null) {
+      return unfiltered;
+    }
+    filter = filter.trim();
+    if (filter.isEmpty()) {
+      return unfiltered;
+    }
+    filter = filter.toLowerCase();
+    for (int i = 0; i < unfiltered.size(); i++) {
+      if (!unfiltered.get(i).label.toString().toLowerCase().contains(filter)) {
+        unfiltered.remove(i);
+        i--;
+      }
+    }
+    return unfiltered;
   }
 }

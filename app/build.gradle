@@ -10,6 +10,7 @@ ext {
   versionButterKnife = "7.0.1"
   versionPicasso = "2.5.2"
   versionOkHttp = "2.5.0"
+  versionOtto = "1.3.8"
 
   versionGlide = "3.6.1"
 }
@@ -51,5 +52,6 @@ dependencies {
 
   compile "com.squareup.okhttp:okhttp:$versionOkHttp"
 
+  compile "com.squareup:otto:$versionOtto"
 
 }

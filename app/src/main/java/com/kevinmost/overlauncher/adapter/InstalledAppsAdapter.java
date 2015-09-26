@@ -1,6 +1,5 @@
 package com.kevinmost.overlauncher.adapter;
 
-import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +9,13 @@ import android.widget.TextView;
 
 import com.kevinmost.overlauncher.R;
 import com.kevinmost.overlauncher.app.App;
+import com.kevinmost.overlauncher.event.FilterChangedEvent;
 import com.kevinmost.overlauncher.model.InstalledApp;
 import com.kevinmost.overlauncher.util.PackageUtil;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -38,21 +39,32 @@ public class InstalledAppsAdapter extends BaseAdapter {
   @Inject
   App app;
 
-  private List<InstalledApp> installedAppsListCache;
+  @Inject
+  Bus bus;
+
+  private List<InstalledApp> shownAppsCache;
+  private String filter;
 
   public InstalledAppsAdapter() {
     App.inject(this);
-    refreshInstalledPackagesCache();
+    bus.register(this);
+    refreshShownPackagesCache();
+  }
+
+  @Subscribe
+  public void onFilterTextChangedEvent(FilterChangedEvent event) {
+    filter = event.newFilter;
+    notifyDataSetChanged();
   }
 
   @Override
   public int getCount() {
-    return installedAppsListCache.size();
+    return shownAppsCache.size();
   }
 
   @Override
   public InstalledApp getItem(int position) {
-    return installedAppsListCache.get(position);
+    return shownAppsCache.get(position);
   }
 
   @Override
@@ -62,7 +74,7 @@ public class InstalledAppsAdapter extends BaseAdapter {
 
   @Override
   public void notifyDataSetChanged() {
-    refreshInstalledPackagesCache();
+    refreshShownPackagesCache();
     super.notifyDataSetChanged();
   }
 
@@ -91,9 +103,9 @@ public class InstalledAppsAdapter extends BaseAdapter {
     return convertView;
   }
 
-  private void refreshInstalledPackagesCache() {
-    installedAppsListCache = packageUtil.getInstalledPackages();
-    Collections.sort(installedAppsListCache, new Comparator<InstalledApp>() {
+  private void refreshShownPackagesCache() {
+    shownAppsCache = packageUtil.getInstalledPackages(filter);
+    Collections.sort(shownAppsCache, new Comparator<InstalledApp>() {
       @Override
       public int compare(InstalledApp lhs, InstalledApp rhs) {
         return lhs.label.toString().compareTo(rhs.label.toString());

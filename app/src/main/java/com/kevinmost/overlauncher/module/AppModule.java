@@ -13,6 +13,7 @@ import com.kevinmost.overlauncher.model.InstalledApp;
 import com.kevinmost.overlauncher.util.PackageUtil;
 import com.kevinmost.overlauncher.util.ViewUtil;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.otto.Bus;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
@@ -82,6 +83,12 @@ public class AppModule {
         .downloader(new OkHttpDownloader(okHttp))
         .indicatorsEnabled(BuildConfig.DEBUG)
         .build();
+  }
+
+  @Provides
+  @Singleton
+  Bus provideBus() {
+    return new Bus();
   }
 
   private <T> T getSystemService(final String service) {

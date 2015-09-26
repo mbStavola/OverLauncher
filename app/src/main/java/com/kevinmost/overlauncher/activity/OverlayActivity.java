@@ -8,16 +8,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AbsListView;
+import android.widget.EditText;
 
 import com.kevinmost.overlauncher.R;
 import com.kevinmost.overlauncher.adapter.InstalledAppsAdapter;
 import com.kevinmost.overlauncher.app.App;
+import com.kevinmost.overlauncher.event.FilterChangedEvent;
 import com.kevinmost.overlauncher.util.ViewUtil;
+import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnTextChanged;
 
 public class OverlayActivity extends AppCompatActivity {
 
@@ -27,6 +31,9 @@ public class OverlayActivity extends AppCompatActivity {
   @Inject
   ViewUtil viewUtil;
 
+  @Inject
+  Bus bus;
+
   @Bind(R.id.appList)
   AbsListView appList;
 
@@ -34,10 +41,25 @@ public class OverlayActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     App.inject(this);
+    bus.register(this);
     setupWindow();
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
+
     initAppList();
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    bus.unregister(this);
+    ButterKnife.unbind(this);
+  }
+
+  @OnTextChanged(R.id.filterInput)
+  void onFilterTextChanged(CharSequence text) {
+    // TODO: Do we want the old text in the event at all?
+    bus.post(new FilterChangedEvent(null, text.toString()));
   }
 
   private void initAppList() {
