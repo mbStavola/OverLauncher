@@ -104,7 +104,7 @@ public class InstalledAppsAdapter extends BaseAdapter {
   }
 
   private void refreshShownPackagesCache() {
-    shownAppsCache = packageUtil.getInstalledPackages(filter);
+    shownAppsCache = packageUtil.getInstalledPackages(filter, PackageUtil.FilterMode.ONLY_START_OF_WORDS);
     Collections.sort(shownAppsCache, new Comparator<InstalledApp>() {
       @Override
       public int compare(InstalledApp lhs, InstalledApp rhs) {

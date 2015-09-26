@@ -55,7 +55,7 @@ public class PackageUtil {
     return installedApps;
   }
 
-  public @NonNull List<InstalledApp> getInstalledPackages(@Nullable String filter) {
+  public @NonNull List<InstalledApp> getInstalledPackages(@Nullable String filter, @Nullable FilterMode filterMode) {
     final List<InstalledApp> unfiltered = getInstalledPackages();
     if (filter == null) {
       return unfiltered;
@@ -64,13 +64,41 @@ public class PackageUtil {
     if (filter.isEmpty()) {
       return unfiltered;
     }
+    if (filterMode == null) {
+      filterMode = FilterMode.BASIC;
+    }
     filter = filter.toLowerCase();
     for (int i = 0; i < unfiltered.size(); i++) {
-      if (!unfiltered.get(i).label.toString().toLowerCase().contains(filter)) {
+      final String appLabel = unfiltered.get(i).label.toString().toLowerCase();
+      if (!filterMode.shouldRetainApp(appLabel, filter)) {
         unfiltered.remove(i);
         i--;
       }
     }
     return unfiltered;
+  }
+
+  public enum FilterMode {
+    BASIC {
+      @Override
+      protected boolean shouldRetainApp(String appLabel, String filterString) {
+        return appLabel.contains(filterString);
+      }
+    },
+    ONLY_START_OF_STRING {
+      @Override
+      protected boolean shouldRetainApp(String appLabel, String filterString) {
+        return appLabel.startsWith(filterString);
+      }
+    },
+    ONLY_START_OF_WORDS {
+      @Override
+      protected boolean shouldRetainApp(String appLabel, String filterString) {
+        return appLabel.startsWith(filterString) || appLabel.contains(" " + filterString);
+      }
+    },
+    ;
+
+    protected abstract boolean shouldRetainApp(String appLabel, String filterString);
   }
 }
