@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AbsListView;
-import android.widget.EditText;
 
 import com.kevinmost.overlauncher.R;
 import com.kevinmost.overlauncher.adapter.InstalledAppsAdapter;
@@ -42,7 +41,7 @@ public class OverlayActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     App.inject(this);
     bus.register(this);
-    setupWindow();
+    setUpFloatingWindow();
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
 
@@ -67,7 +66,7 @@ public class OverlayActivity extends AppCompatActivity {
     appList.setAdapter(appsAdapter);
   }
 
-  private void setupWindow() {
+  private void setUpFloatingWindow() {
     final Window window = getWindow();
     window.setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,
         WindowManager.LayoutParams.FLAG_DIM_BEHIND);

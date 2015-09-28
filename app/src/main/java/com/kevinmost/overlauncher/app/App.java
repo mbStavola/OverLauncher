@@ -17,8 +17,7 @@ public class App extends Application {
 
   private static void setInstance(App app) {
     if (INSTANCE != null && INSTANCE != app) {
-      throw new RuntimeException("More than one instance of singleton BaseApp has been registered" +
-          ".");
+      throw new RuntimeException("More than one instance of singleton App has been registered.");
     }
     INSTANCE = app;
   }

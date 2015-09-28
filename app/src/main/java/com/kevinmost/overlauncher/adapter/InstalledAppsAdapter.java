@@ -1,5 +1,7 @@
 package com.kevinmost.overlauncher.adapter;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +12,14 @@ import android.widget.TextView;
 import com.kevinmost.overlauncher.R;
 import com.kevinmost.overlauncher.app.App;
 import com.kevinmost.overlauncher.event.FilterChangedEvent;
+import com.kevinmost.overlauncher.model.AppsCache;
 import com.kevinmost.overlauncher.model.InstalledApp;
 import com.kevinmost.overlauncher.util.PackageUtil;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -26,9 +28,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class InstalledAppsAdapter extends BaseAdapter {
-
-  @Inject
-  PackageUtil packageUtil;
 
   @Inject
   LayoutInflater inflater;
@@ -42,8 +41,10 @@ public class InstalledAppsAdapter extends BaseAdapter {
   @Inject
   Bus bus;
 
+  @Inject
+  AppsCache appsCache;
+
   private List<InstalledApp> shownAppsCache;
-  private String filter;
 
   public InstalledAppsAdapter() {
     App.inject(this);
@@ -53,29 +54,31 @@ public class InstalledAppsAdapter extends BaseAdapter {
 
   @Subscribe
   public void onFilterTextChangedEvent(FilterChangedEvent event) {
-    filter = event.newFilter;
+    shownAppsCache = filter(appsCache.getInstalledApps(), event.newFilter, PackageUtil.FilterMode.ONLY_START_OF_WORDS);
     notifyDataSetChanged();
   }
 
   @Override
   public int getCount() {
-    return shownAppsCache.size();
+    if (shownAppsCache == null) {
+      return appsCache.getInstalledApps().size();
+    } else {
+      return shownAppsCache.size();
+    }
   }
 
   @Override
   public InstalledApp getItem(int position) {
-    return shownAppsCache.get(position);
+    if (shownAppsCache == null) {
+      return appsCache.getInstalledApps().get(position);
+    } else {
+      return shownAppsCache.get(position);
+    }
   }
 
   @Override
   public long getItemId(int position) {
     return position;
-  }
-
-  @Override
-  public void notifyDataSetChanged() {
-    refreshShownPackagesCache();
-    super.notifyDataSetChanged();
   }
 
   @Override
@@ -104,14 +107,31 @@ public class InstalledAppsAdapter extends BaseAdapter {
   }
 
   private void refreshShownPackagesCache() {
-    shownAppsCache = packageUtil.getInstalledPackages(filter, PackageUtil.FilterMode.ONLY_START_OF_WORDS);
-    Collections.sort(shownAppsCache, new Comparator<InstalledApp>() {
-      @Override
-      public int compare(InstalledApp lhs, InstalledApp rhs) {
-        return lhs.label.toString().compareTo(rhs.label.toString());
-      }
-    });
+    appsCache.refreshInstalledAppsCache();
   }
+
+  private static List<InstalledApp> filter(@NonNull List<InstalledApp> unfiltered,
+                                           @Nullable String filter,
+                                           @Nullable PackageUtil.FilterMode filterMode) {
+    filter = (filter == null ? "" : filter.trim());
+    if (filter.isEmpty()) {
+      return unfiltered;
+    }
+    if (filterMode == null) {
+      filterMode = PackageUtil.FilterMode.BASIC;
+    }
+    filter = filter.toLowerCase();
+    final List<InstalledApp> filtered = new ArrayList<>();
+    for (InstalledApp anApp : unfiltered) {
+      final String appLabel = anApp.label.toString().toLowerCase();
+      final boolean shouldRetainApp = filterMode.shouldRetainApp(appLabel, filter);
+      if (shouldRetainApp) {
+        filtered.add(anApp);
+      }
+    }
+    return filtered;
+  }
+
 
   static class ViewHolder {
     @Bind(R.id.icon)
