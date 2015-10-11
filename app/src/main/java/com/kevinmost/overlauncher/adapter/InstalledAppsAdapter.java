@@ -11,8 +11,9 @@ import android.widget.TextView;
 
 import com.kevinmost.overlauncher.R;
 import com.kevinmost.overlauncher.app.App;
+import com.kevinmost.overlauncher.event.AppsCacheRequestUpdateEvent;
 import com.kevinmost.overlauncher.event.FilterChangedEvent;
-import com.kevinmost.overlauncher.model.AppsCache;
+import com.kevinmost.overlauncher.util.AppsCache;
 import com.kevinmost.overlauncher.model.InstalledApp;
 import com.kevinmost.overlauncher.util.PackageUtil;
 import com.squareup.otto.Bus;
@@ -49,7 +50,7 @@ public class InstalledAppsAdapter extends BaseAdapter {
   public InstalledAppsAdapter() {
     App.inject(this);
     bus.register(this);
-    refreshShownPackagesCache();
+    bus.post(new AppsCacheRequestUpdateEvent());
   }
 
   @Subscribe
@@ -104,10 +105,6 @@ public class InstalledAppsAdapter extends BaseAdapter {
     });
 
     return convertView;
-  }
-
-  private void refreshShownPackagesCache() {
-    appsCache.refreshInstalledAppsCache();
   }
 
   private static List<InstalledApp> filter(@NonNull List<InstalledApp> unfiltered,

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-  package="com.kevinmost.overlauncher"
   xmlns:android="http://schemas.android.com/apk/res/android"
-  >
+  package="com.kevinmost.overlauncher">
 
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
@@ -19,15 +18,13 @@
       android:label="@string/app_name"
       android:launchMode="singleTask"
       android:screenOrientation="nosensor"
-      android:theme="@style/AppTheme"
-      >
+      android:theme="@style/AppTheme">
       <intent-filter>
+        <!-- This terribly-named Intent overrides the Google Now "swipe-up-from-navbar" gesture. -->
         <action android:name="android.intent.action.ASSIST"/>
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
     </activity>
-
-    <service android:name=".service.OverlayService"/>
 
   </application>
 

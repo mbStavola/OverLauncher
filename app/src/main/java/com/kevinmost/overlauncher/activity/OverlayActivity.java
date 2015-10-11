@@ -58,7 +58,7 @@ public class OverlayActivity extends AppCompatActivity {
   @OnTextChanged(R.id.filterInput)
   void onFilterTextChanged(CharSequence text) {
     // TODO: Do we want the old text in the event at all?
-    bus.post(new FilterChangedEvent(null, text.toString()));
+    bus.post(new FilterChangedEvent(text.toString()));
   }
 
   private void initAppList() {
@@ -81,7 +81,7 @@ public class OverlayActivity extends AppCompatActivity {
     window.setAttributes(params);
 
     final Point screenDimens = viewUtil.getDisplayDimensions();
-    window.setLayout((int)(screenDimens.x * WIDTH_PERCENTAGE),
+    window.setLayout((int) (screenDimens.x * WIDTH_PERCENTAGE),
         (int) (screenDimens.y * HEIGHT_PERCENTAGE));
   }
 }

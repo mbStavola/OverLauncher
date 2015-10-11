@@ -1,7 +1,10 @@
-package com.kevinmost.overlauncher.model;
+package com.kevinmost.overlauncher.util;
 
+import com.google.common.eventbus.Subscribe;
 import com.kevinmost.overlauncher.app.App;
+import com.kevinmost.overlauncher.event.AppsCacheRequestUpdateEvent;
 import com.kevinmost.overlauncher.event.AppsCacheUpdatedEvent;
+import com.kevinmost.overlauncher.model.InstalledApp;
 import com.kevinmost.overlauncher.util.PackageUtil;
 import com.squareup.otto.Bus;
 
@@ -30,6 +33,15 @@ public class AppsCache {
 
   public List<InstalledApp> getInstalledApps() {
     return installedApps;
+  }
+
+  /**
+   * When a {@link AppsCacheRequestUpdateEvent} is fired, we will refresh our local cache, and then
+   * fire a {@link AppsCacheUpdatedEvent} when it is completed.
+   */
+  @Subscribe
+  public void onAppsCacheUpdateRequested(AppsCacheRequestUpdateEvent event) {
+    refreshInstalledAppsCache();
   }
 
   public void refreshInstalledAppsCache() {

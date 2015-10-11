@@ -9,7 +9,7 @@ import com.kevinmost.overlauncher.BuildConfig;
 import com.kevinmost.overlauncher.activity.OverlayActivity;
 import com.kevinmost.overlauncher.adapter.InstalledAppsAdapter;
 import com.kevinmost.overlauncher.app.App;
-import com.kevinmost.overlauncher.model.AppsCache;
+import com.kevinmost.overlauncher.util.AppsCache;
 import com.kevinmost.overlauncher.model.InstalledApp;
 import com.kevinmost.overlauncher.util.PackageUtil;
 import com.kevinmost.overlauncher.util.ViewUtil;
