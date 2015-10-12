@@ -52,7 +52,6 @@ public class InstalledAppsAdapter extends BaseAdapter {
   public InstalledAppsAdapter() {
     App.inject(this);
     bus.register(this);
-    bus.post(new AppsCacheRequestUpdateEvent());
   }
 
   @Subscribe

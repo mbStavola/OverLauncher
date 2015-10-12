@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.kevinmost.overlauncher">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.kevinmost.overlauncher">
 
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
@@ -25,6 +24,19 @@
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
     </activity>
+
+    <receiver
+      android:name=".receiver.AppsChangedReceiver"
+      android:enabled="true">
+      <intent-filter>
+        <action android:name="android.intent.action.PACKAGE_ADDED"/>
+        <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+        <action android:name="android.intent.action.PACKAGE_CHANGED"/>
+        <action android:name="android.intent.action.PACKAGE_REPLACED"/>
+
+        <data android:scheme="package"/>
+      </intent-filter>
+    </receiver>
 
   </application>
 

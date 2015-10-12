@@ -3,6 +3,8 @@ package com.kevinmost.overlauncher.util;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
+import com.kevinmost.overlauncher.BuildConfig;
 import com.kevinmost.overlauncher.app.App;
 import com.kevinmost.overlauncher.event.AppsCacheRequestUpdateEvent;
 import com.kevinmost.overlauncher.event.AppsCacheUpdatedEvent;
@@ -27,6 +29,9 @@ public class AppsCache {
   @Inject
   PackageUtil packageUtil;
 
+  @Inject
+  App app;
+
   private List<InstalledApp> installedApps;
 
   private final SerializablePreference<InstalledApp[]> persistenceCache = new SerializablePreference<>("APPS_CACHE", InstalledApp[].class);
@@ -36,10 +41,11 @@ public class AppsCache {
     App.inject(this);
     bus.register(this);
     final InstalledApp[] cachedInstalledApps = persistenceCache.get();
-    if (cachedInstalledApps != null) {
-      this.installedApps = Arrays.asList(cachedInstalledApps);
-    } else {
+    if (cachedInstalledApps == null) {
       this.installedApps = new ArrayList<>();
+      refreshInstalledAppsCache();
+    } else {
+      this.installedApps = Arrays.asList(cachedInstalledApps);
     }
   }
 
@@ -57,6 +63,9 @@ public class AppsCache {
   }
 
   public void refreshInstalledAppsCache() {
+    if (BuildConfig.DEBUG) {
+      Toast.makeText(app, "Apps updating... ", Toast.LENGTH_SHORT).show();
+    }
     installedApps = packageUtil.getInstalledPackages();
     Collections.sort(installedApps, new Comparator<InstalledApp>() {
       @Override

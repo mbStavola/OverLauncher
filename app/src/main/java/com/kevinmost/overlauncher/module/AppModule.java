@@ -11,6 +11,7 @@ import com.kevinmost.overlauncher.activity.OverlayActivity;
 import com.kevinmost.overlauncher.adapter.InstalledAppsAdapter;
 import com.kevinmost.overlauncher.app.App;
 import com.kevinmost.overlauncher.model.InstalledApp;
+import com.kevinmost.overlauncher.receiver.AppsChangedReceiver;
 import com.kevinmost.overlauncher.util.AppsCache;
 import com.kevinmost.overlauncher.util.PackageUtil;
 import com.kevinmost.overlauncher.util.SerializablePreference;
@@ -29,6 +30,7 @@ import java.util.concurrent.TimeUnit;
     injects = {
         App.class,
         AppsCache.class,
+        AppsChangedReceiver.class,
         InstalledApp.class,
         InstalledAppsAdapter.class,
         OverlayActivity.class,
