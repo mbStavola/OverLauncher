@@ -2,7 +2,6 @@ package com.kevinmost.overlauncher.util;
 
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.widget.Toast;
 import com.kevinmost.overlauncher.BuildConfig;
 import com.kevinmost.overlauncher.app.App;
@@ -11,7 +10,6 @@ import com.kevinmost.overlauncher.event.AppsCacheUpdatedEvent;
 import com.kevinmost.overlauncher.model.InstalledApp;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import org.json.JSONObject;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

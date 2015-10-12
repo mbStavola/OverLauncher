@@ -5,7 +5,7 @@ import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AbsListView;
@@ -43,22 +43,10 @@ public class OverlayActivity extends AppCompatActivity {
     App.inject(this);
     bus.register(this);
     setUpFloatingWindow();
-    setContentView(R.layout.activity_main);
+    setContentView(R.layout.activity_overlay);
     ButterKnife.bind(this);
 
     initAppList();
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    bus.unregister(this);
-    ButterKnife.unbind(this);
-  }
-
-  @OnTextChanged(R.id.filterInput)
-  void onFilterTextChanged(CharSequence text) {
-    bus.post(new FilterChangedEvent(text.toString()));
   }
 
   private void initAppList() {
@@ -79,9 +67,26 @@ public class OverlayActivity extends AppCompatActivity {
     // Higher -> behind window is dimmer
     params.dimAmount = 0.75F;
     window.setAttributes(params);
+  }
 
-    final Point screenDimens = viewUtil.getDisplayDimensions();
-    window.setLayout((int) (screenDimens.x * WIDTH_PERCENTAGE),
-        (int) (screenDimens.y * HEIGHT_PERCENTAGE));
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    bus.unregister(this);
+    ButterKnife.unbind(this);
+  }
+
+  @OnTextChanged(R.id.filterInput)
+  void onFilterTextChanged(CharSequence text) {
+    bus.post(new FilterChangedEvent(text.toString()));
+  }
+
+  /**
+   * If nothing consumed the touch event, we'll close this activity
+   */
+  @Override
+  public boolean onTouchEvent(MotionEvent event) {
+    finish();
+    return super.onTouchEvent(event);
   }
 }

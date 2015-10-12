@@ -100,6 +100,7 @@ public class InstalledAppsAdapter extends BaseAdapter {
     convertView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+        // TODO: Should we also finish() the OverlayActivity that's open here?
         app.startActivity(thisApp.startAppIntent);
       }
     });
