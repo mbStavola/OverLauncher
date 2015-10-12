@@ -1,29 +1,29 @@
 package com.kevinmost.overlauncher.module;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
-
 import com.kevinmost.overlauncher.BuildConfig;
 import com.kevinmost.overlauncher.activity.OverlayActivity;
 import com.kevinmost.overlauncher.adapter.InstalledAppsAdapter;
 import com.kevinmost.overlauncher.app.App;
-import com.kevinmost.overlauncher.util.AppsCache;
 import com.kevinmost.overlauncher.model.InstalledApp;
+import com.kevinmost.overlauncher.util.AppsCache;
 import com.kevinmost.overlauncher.util.PackageUtil;
+import com.kevinmost.overlauncher.util.SerializablePreference;
 import com.kevinmost.overlauncher.util.ViewUtil;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.otto.Bus;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
-
-import java.util.concurrent.TimeUnit;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
+
+import javax.inject.Singleton;
+import java.util.concurrent.TimeUnit;
 
 @Module(
     injects = {
@@ -33,6 +33,7 @@ import dagger.Provides;
         InstalledAppsAdapter.class,
         OverlayActivity.class,
         PackageUtil.class,
+        SerializablePreference.class,
         ViewUtil.class,
     },
     library = true
@@ -66,6 +67,12 @@ public class AppModule {
   @Singleton
   WindowManager provideWindowManager() {
     return getSystemService(Context.WINDOW_SERVICE);
+  }
+
+  @Provides
+  @Singleton
+  SharedPreferences provideSharedPreferences() {
+    return PreferenceManager.getDefaultSharedPreferences(app);
   }
 
   @Provides

@@ -1,11 +1,9 @@
 package com.kevinmost.overlauncher.util;
 
-import android.content.Context;
 import android.graphics.Point;
 import android.support.annotation.NonNull;
 import android.view.Display;
 import android.view.WindowManager;
-
 import com.kevinmost.overlauncher.app.App;
 
 import javax.inject.Inject;

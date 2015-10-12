@@ -5,6 +5,7 @@ import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AbsListView;
@@ -57,7 +58,6 @@ public class OverlayActivity extends AppCompatActivity {
 
   @OnTextChanged(R.id.filterInput)
   void onFilterTextChanged(CharSequence text) {
-    // TODO: Do we want the old text in the event at all?
     bus.post(new FilterChangedEvent(text.toString()));
   }
 
