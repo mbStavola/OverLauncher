@@ -4,7 +4,6 @@ import android.graphics.Point;
 import android.support.annotation.NonNull;
 import android.view.Display;
 import android.view.WindowManager;
-import com.kevinmost.overlauncher.app.App;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -12,12 +11,11 @@ import javax.inject.Singleton;
 @Singleton
 public class ViewUtil {
 
-  @Inject
-  WindowManager windowManager;
+  private final WindowManager windowManager;
 
   @Inject
-  ViewUtil() {
-    App.inject(this);
+  ViewUtil(WindowManager windowManager) {
+    this.windowManager = windowManager;
   }
 
   @NonNull

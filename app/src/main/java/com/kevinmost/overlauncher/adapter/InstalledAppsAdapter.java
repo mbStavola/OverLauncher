@@ -2,56 +2,42 @@ package com.kevinmost.overlauncher.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.kevinmost.overlauncher.R;
 import com.kevinmost.overlauncher.app.App;
-import com.kevinmost.overlauncher.event.AppsCacheRequestUpdateEvent;
+import com.kevinmost.overlauncher.dagger.AppComponent;
 import com.kevinmost.overlauncher.event.AppsCacheUpdatedEvent;
 import com.kevinmost.overlauncher.event.FilterChangedEvent;
-import com.kevinmost.overlauncher.util.AppsCache;
 import com.kevinmost.overlauncher.model.InstalledApp;
+import com.kevinmost.overlauncher.util.AppsCache;
 import com.kevinmost.overlauncher.util.PackageUtil;
-import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 public class InstalledAppsAdapter extends BaseAdapter {
 
-  @Inject
-  LayoutInflater inflater;
-
-  @Inject
-  Picasso picasso;
-
-  @Inject
-  App app;
-
-  @Inject
-  Bus bus;
-
-  @Inject
-  AppsCache appsCache;
+  private final LayoutInflater inflater;
+  private final App app;
+  private final AppsCache appsCache;
 
   private final List<InstalledApp> shownAppsCache = new ArrayList<>();
 
   public InstalledAppsAdapter() {
-    App.inject(this);
-    bus.register(this);
+    final AppComponent component = App.provideComponent();
+    inflater = component.provideLayoutInflater();
+    app = component.provideApp();
+    appsCache = component.provideAppsCache();
+
+    component.provideBus().register(this);
   }
 
   @Subscribe

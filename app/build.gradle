@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 
 ext {
   versionAppCode = 1
@@ -10,7 +11,7 @@ ext {
   versionJackson = "2.6.2"
   versionButterKnife = "7.0.1"
   versionDiskLRUCache = "2.0.2"
-  versionDagger = "1.2.2"
+  versionDagger = "2.0"
   versionPicasso = "2.5.2"
   versionOkHttp = "2.5.0"
   versionOtto = "1.3.8"
@@ -56,8 +57,10 @@ dependencies {
 
   compile "com.jakewharton:disklrucache:$versionDiskLRUCache"
 
-  compile "com.squareup.dagger:dagger:$versionDagger"
-  provided "com.squareup.dagger:dagger-compiler:$versionDagger"
+  compile "com.google.dagger:dagger:$versionDagger"
+  apt "com.google.dagger:dagger-compiler:$versionDagger"
+  provided 'org.glassfish:javax.annotation:10.0-b28'
+
 
   compile "com.squareup.picasso:picasso:$versionPicasso"
 
