@@ -21,22 +21,20 @@ import java.util.List;
 
 @Singleton
 public class AppsCache {
-  @Inject
-  Bus bus;
-
-  @Inject
-  PackageUtil packageUtil;
-
-  @Inject
-  App app;
+  private final Bus bus;
+  private final PackageUtil packageUtil;
+  private final App app;
 
   private List<InstalledApp> installedApps;
 
   private final SerializablePreference<InstalledApp[]> persistenceCache = new SerializablePreference<>("APPS_CACHE", InstalledApp[].class);
 
   @Inject
-  AppsCache() {
-    App.inject(this);
+  AppsCache(Bus bus, PackageUtil packageUtil, App app) {
+    this.bus = bus;
+    this.packageUtil = packageUtil;
+    this.app = app;
+
     bus.register(this);
     final InstalledApp[] cachedInstalledApps = persistenceCache.get();
     if (cachedInstalledApps == null) {

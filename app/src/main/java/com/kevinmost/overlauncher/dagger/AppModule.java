@@ -1,4 +1,4 @@
-package com.kevinmost.overlauncher.module;
+package com.kevinmost.overlauncher.dagger;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,15 +7,7 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 import com.kevinmost.overlauncher.BuildConfig;
-import com.kevinmost.overlauncher.activity.OverlayActivity;
-import com.kevinmost.overlauncher.adapter.InstalledAppsAdapter;
 import com.kevinmost.overlauncher.app.App;
-import com.kevinmost.overlauncher.model.InstalledApp;
-import com.kevinmost.overlauncher.receiver.AppsChangedReceiver;
-import com.kevinmost.overlauncher.util.AppsCache;
-import com.kevinmost.overlauncher.util.PackageUtil;
-import com.kevinmost.overlauncher.util.SerializablePreference;
-import com.kevinmost.overlauncher.util.ViewUtil;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.otto.Bus;
 import com.squareup.picasso.OkHttpDownloader;
@@ -26,20 +18,7 @@ import dagger.Provides;
 import javax.inject.Singleton;
 import java.util.concurrent.TimeUnit;
 
-@Module(
-    injects = {
-        App.class,
-        AppsCache.class,
-        AppsChangedReceiver.class,
-        InstalledApp.class,
-        InstalledAppsAdapter.class,
-        OverlayActivity.class,
-        PackageUtil.class,
-        SerializablePreference.class,
-        ViewUtil.class,
-    },
-    library = true
-)
+@Module
 public class AppModule {
   private final App app;
 

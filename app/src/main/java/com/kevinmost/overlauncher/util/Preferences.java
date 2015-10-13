@@ -12,14 +12,13 @@ import java.util.Set;
 @Singleton
 public class Preferences {
 
-  @Inject
-  App app;
+  private final App app;
 
   private final SharedPreferences preferences;
 
   @Inject
-  Preferences() {
-    App.inject(this);
+  Preferences(App app) {
+    this.app = app;
     preferences = PreferenceManager.getDefaultSharedPreferences(app);
     pruneAllObsoletePreferences();
   }
@@ -50,7 +49,6 @@ public class Preferences {
   // NOTE: Changing these enum entry names will invalidate all user settings that exist already,
   // as they will be looked up from a different key.
   public enum Key {
-    APPS_CACHE((String) null)
     ;
 
     private final Object defaultValue;

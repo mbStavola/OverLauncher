@@ -1,7 +1,6 @@
 package com.kevinmost.overlauncher.activity;
 
 import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,38 +8,28 @@ import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AbsListView;
-
-import com.kevinmost.overlauncher.R;
-import com.kevinmost.overlauncher.adapter.InstalledAppsAdapter;
-import com.kevinmost.overlauncher.app.App;
-import com.kevinmost.overlauncher.event.FilterChangedEvent;
-import com.kevinmost.overlauncher.util.ViewUtil;
-import com.squareup.otto.Bus;
-
-import javax.inject.Inject;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnTextChanged;
+import com.kevinmost.overlauncher.R;
+import com.kevinmost.overlauncher.adapter.InstalledAppsAdapter;
+import com.kevinmost.overlauncher.app.App;
+import com.kevinmost.overlauncher.dagger.AppComponent;
+import com.kevinmost.overlauncher.event.FilterChangedEvent;
+import com.squareup.otto.Bus;
 
 public class OverlayActivity extends AppCompatActivity {
-
-  private static final float WIDTH_PERCENTAGE = 0.9F;
-  private static final float HEIGHT_PERCENTAGE = 0.7F;
-
-  @Inject
-  ViewUtil viewUtil;
-
-  @Inject
-  Bus bus;
 
   @Bind(R.id.appList)
   AbsListView appList;
 
+  private Bus bus;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    App.inject(this);
+    final AppComponent component = App.provideComponent();
+    bus = component.provideBus();
     bus.register(this);
     setUpFloatingWindow();
     setContentView(R.layout.activity_overlay);

@@ -3,25 +3,21 @@ package com.kevinmost.overlauncher.util;
 import android.content.SharedPreferences;
 import android.util.Log;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kevinmost.overlauncher.app.App;
 
-import javax.inject.Inject;
 import java.io.IOException;
 
 public class SerializablePreference<T> {
   private final String key;
   private final Class<T> clazz;
 
-  @Inject
-  SharedPreferences preferences;
+  private final SharedPreferences preferences;
 
   private final ObjectMapper mapper = new ObjectMapper();
 
   public SerializablePreference(String key, Class<T> clazz) {
-    App.inject(this);
+    preferences = App.provideComponent().provideSharedPreferences();
     this.key = key;
     this.clazz = clazz;
   }

@@ -6,26 +6,22 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import com.kevinmost.overlauncher.app.App;
 import com.kevinmost.overlauncher.model.InstalledApp;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.ArrayList;
+import java.util.List;
 
 @Singleton
 public class PackageUtil {
 
-  @Inject
-  PackageManager packageManager;
+  private final PackageManager packageManager;
 
   @Inject
-  PackageUtil() {
-    App.inject(this);
+  PackageUtil(PackageManager packageManager) {
+    this.packageManager = packageManager;
   }
 
   /**

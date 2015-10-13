@@ -3,21 +3,16 @@ package com.kevinmost.overlauncher.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 import com.kevinmost.overlauncher.app.App;
 import com.kevinmost.overlauncher.event.AppsCacheRequestUpdateEvent;
 import com.squareup.otto.Bus;
 
-import javax.inject.Inject;
-
 public class AppsChangedReceiver extends BroadcastReceiver {
 
-  @Inject
-  Bus bus;
+  private final Bus bus;
 
   public AppsChangedReceiver() {
-    super();
-    App.inject(this);
+    bus = App.provideComponent().provideBus();
     bus.register(this);
   }
 
