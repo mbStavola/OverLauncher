@@ -3,7 +3,7 @@
   <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
     <item name="android:windowIsTranslucent">true</item>
     <!-- TODO(Kevin): Maybe we want this to close on touch-outside? -->
-    <item name="android:windowCloseOnTouchOutside">false</item>
+    <item name="android:windowCloseOnTouchOutside">true</item>
   </style>
 
 </resources>

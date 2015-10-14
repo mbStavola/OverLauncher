@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.kevinmost.overlauncher.R;
@@ -18,6 +19,7 @@ import com.kevinmost.overlauncher.event.FilterChangedEvent;
 import com.kevinmost.overlauncher.model.InstalledApp;
 import com.kevinmost.overlauncher.util.AppsCache;
 import com.kevinmost.overlauncher.util.PackageUtil;
+import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -25,26 +27,26 @@ import java.util.List;
 
 public class InstalledAppsAdapter extends BaseAdapter {
 
+  private final Bus bus;
+  private String filter;
+  private List<InstalledApp> shownAppsCache = new ArrayList<>();
+
   private final LayoutInflater inflater;
   private final App app;
   private final AppsCache appsCache;
 
-  private final List<InstalledApp> shownAppsCache = new ArrayList<>();
-
   public InstalledAppsAdapter() {
     final AppComponent component = App.provideComponent();
+    bus = component.provideBus();
+    bus.register(this);
     inflater = component.provideLayoutInflater();
     app = component.provideApp();
     appsCache = component.provideAppsCache();
-
-    component.provideBus().register(this);
   }
 
   @Subscribe
   public void onFilterTextChangedEvent(FilterChangedEvent event) {
-    shownAppsCache.clear();
-    shownAppsCache.addAll(filter(appsCache.getInstalledApps(), event.newFilter,
-        PackageUtil.FilterMode.ONLY_START_OF_WORDS));
+    this.filter = event.newFilter;
     notifyDataSetChanged();
   }
 
@@ -94,6 +96,17 @@ public class InstalledAppsAdapter extends BaseAdapter {
     return convertView;
   }
 
+  @Override
+  public void notifyDataSetChanged() {
+    if (appsCache != null) {
+      final List<InstalledApp> installedApps = appsCache.getInstalledApps();
+      shownAppsCache = filter(installedApps, filter, PackageUtil.FilterMode.ONLY_START_OF_WORDS);
+    }
+    super.notifyDataSetChanged();
+  }
+
+  // TODO: Give the user a way to change the filter mode
+  @NonNull
   private static List<InstalledApp> filter(@NonNull List<InstalledApp> unfiltered,
                                            @Nullable String filter,
                                            @Nullable PackageUtil.FilterMode filterMode) {
