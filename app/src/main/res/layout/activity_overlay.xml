@@ -4,6 +4,7 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:orientation="vertical"
+  android:background="@android:color/white"
   tools:context=".MainActivity">
 
   <EditText
@@ -11,7 +12,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:hint="Search"
-    android:inputType="text"/>
+    android:inputType="text"
+    android:textColorHint="@android:color/darker_gray"
+    android:textColor="@android:color/black"
+    />
 
   <GridView
     android:id="@+id/appList"
