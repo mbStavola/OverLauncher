@@ -7,8 +7,9 @@ import com.kevinmost.overlauncher.dagger.DaggerAppComponent;
 
 public class App extends Application {
   private static App INSTANCE;
-
+  
   private final AppModule module = new AppModule(this);
+  private final AppComponent appComponentInstance = DaggerAppComponent.builder().appModule(module).build();
 
   private static void setInstance(App app) {
     if (INSTANCE != null && INSTANCE != app) {
@@ -18,7 +19,7 @@ public class App extends Application {
   }
 
   public static AppComponent provideComponent() {
-    return DaggerAppComponent.builder().appModule(INSTANCE.module).build();
+    return INSTANCE.appComponentInstance;
   }
 
   @Override
