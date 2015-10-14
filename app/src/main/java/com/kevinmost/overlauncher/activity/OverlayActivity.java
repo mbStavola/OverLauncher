@@ -45,8 +45,8 @@ public class OverlayActivity extends AppCompatActivity {
     final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
     bottomSheetDialog.contentView(R.layout.activity_overlay)
         .heightParam((int) (viewUtil.getDisplayDimensions().y * 0.75F))
-        .inDuration(500)
-        .outDuration(500)
+        .inDuration(300)
+        .outDuration(300)
         .show();
     bottomSheetViewHolder = new BottomSheetViewHolder(bottomSheetDialog);
   }
