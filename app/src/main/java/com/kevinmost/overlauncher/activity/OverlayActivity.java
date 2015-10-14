@@ -53,8 +53,8 @@ public class OverlayActivity extends AppCompatActivity {
 
   private void makeWindowTransparent() {
     final Window window = getWindow();
-    window.setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,
-        WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+    final int flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+    window.setFlags(flags, flags);
     window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     final WindowManager.LayoutParams params = window.getAttributes();
 
