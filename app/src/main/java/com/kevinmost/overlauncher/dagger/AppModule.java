@@ -3,13 +3,20 @@ package com.kevinmost.overlauncher.dagger;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
+import android.widget.Toast;
 import com.kevinmost.overlauncher.BuildConfig;
 import com.kevinmost.overlauncher.app.App;
+import com.kevinmost.overlauncher.util.AppsCache;
+import com.kevinmost.overlauncher.util.PackageUtil;
+import com.kevinmost.overlauncher.util.PostFromAnywhereBus;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.otto.Bus;
+import com.squareup.otto.ThreadEnforcer;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 import dagger.Module;
@@ -24,6 +31,12 @@ public class AppModule {
 
   public AppModule(App app) {
     this.app = app;
+  }
+
+  @Provides
+  @Singleton
+  AppsCache provideAppsCache(Bus bus, PackageUtil packageUtil, App app) {
+    return AppsCache.get();
   }
 
   @Provides
@@ -78,7 +91,7 @@ public class AppModule {
   @Provides
   @Singleton
   Bus provideBus() {
-    return new Bus();
+    return new PostFromAnywhereBus();
   }
 
   private <T> T getSystemService(final String service) {

@@ -19,9 +19,8 @@ import com.kevinmost.overlauncher.dagger.AppComponent;
 import com.kevinmost.overlauncher.util.PackageUtil;
 
 import java.io.IOException;
+import java.io.Serializable;
 
-@JsonSerialize(using = InstalledApp.InstalledAppSerializer.class)
-@JsonDeserialize(using = InstalledApp.InstalledAppDeserializer.class)
 public class InstalledApp {
 
   public final ResolveInfo info;
@@ -38,33 +37,5 @@ public class InstalledApp {
     icon = info.loadIcon(packageManager);
     label = info.loadLabel(packageManager);
     startAppIntent = packageUtil.getStartAppIntent(this);
-  }
-
-  private static final String KEY_RESOLVE_INFO_FIELD = "ResolveInfo";
-
-  static class InstalledAppSerializer extends JsonSerializer<InstalledApp> {
-    @Override
-    public void serialize(InstalledApp value, JsonGenerator gen, SerializerProvider serializers)
-        throws IOException {
-      gen.writeStartObject();
-      gen.writeObjectField(KEY_RESOLVE_INFO_FIELD, value.info);
-      gen.writeEndObject();
-    }
-  }
-
-  static class InstalledAppDeserializer extends JsonDeserializer<InstalledApp> {
-
-    private final ObjectMapper mapper = new ObjectMapper();
-
-    @Override
-    public InstalledApp deserialize(JsonParser p, DeserializationContext ctxt)
-        throws IOException {
-      final JsonNode rootNode = p.getCodec().readTree(p);
-      final JsonNode resolveInfoNode = rootNode.get(KEY_RESOLVE_INFO_FIELD);
-
-      final ResolveInfo resolveInfo = mapper.treeToValue(resolveInfoNode, ResolveInfo.class);
-
-      return new InstalledApp(resolveInfo);
-    }
   }
 }

@@ -7,7 +7,6 @@ import android.view.WindowManager;
 import com.kevinmost.overlauncher.app.App;
 import com.kevinmost.overlauncher.util.AppsCache;
 import com.kevinmost.overlauncher.util.PackageUtil;
-import com.kevinmost.overlauncher.util.Preferences;
 import com.kevinmost.overlauncher.util.ViewUtil;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.otto.Bus;
@@ -30,7 +29,6 @@ public interface AppComponent {
 
   AppsCache provideAppsCache();
   PackageUtil providePackageUtil();
-  Preferences providePreferences();
   ViewUtil provideViewUtil();
 }
 
